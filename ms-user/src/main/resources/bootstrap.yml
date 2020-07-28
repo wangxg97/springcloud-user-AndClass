@@ -1,0 +1,52 @@
+server:
+  port: 8085
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: 192510
+    url: jdbc:mysql://111.229.16.229:3306/ms_user
+    username: root
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+  application:
+    name: ms-user
+  cloud:
+    consul:
+      port: 8500
+      host: localhost
+      discovery:
+#        health-check-path: /actautor/health
+#        健康检查时间间隔 10S
+        health-check-interval: 10s
+        #       consul 请求健康检查超时时间
+        health-check-timeout: 10s
+#        健康检查持续不OK达到该时间consul将会删除该实例
+        health-check-critical-timeout: 100s
+        instance-id: ${spring.application.name}-${server.port}-${spring.cloud.client.hostname}
+      config:
+        format: yaml
+  #  默认为 dev环境
+  profiles:
+    active: dev
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+#以上为通用配置
+---
+#profile=x的专用配置
+spring:
+  profiles: dev
+  jpa:
+    show-sql: true
+---
+#profile=y的专用配置
+spring:
+  profiles: prod
+  jpa:
+    show-sql: false
+---
