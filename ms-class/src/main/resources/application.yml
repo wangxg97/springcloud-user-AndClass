@@ -1,0 +1,110 @@
+server:
+  port: 8083
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: 192510
+    url: jdbc:mysql://111.229.16.229:3306/ms_class
+    username: root
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+  application:
+    name: ms-class
+  cloud:
+    consul:
+      port: 8500
+      host: localhost
+      discovery:
+#        health-check-path: /actautor/health
+        #        健康检查时间间隔 10S
+        health-check-interval: 10s
+        #       consul 请求健康检查超时时间
+        health-check-timeout: 10s
+        #        健康检查持续不OK达到该时间consul将会删除该实例
+        health-check-critical-timeout: 100s
+#        表示注册使用ip而不是hostname
+        prefer-ip-address: true
+        instance-id: ${spring.application.name}-${server.port}-${spring.cloud.client.hostname}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
+#设置调用 ms-user 的ribbon的轮询策略
+#ms-user:
+#  ribbon:
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RandomRule
+
+
+#feign类的日志级别
+logging:
+  level:
+    com.springcloud.feign.MsUserFeignClient: debug
+
+#  用配置的方式设置日志级别，上面那一段不能少 ，细粒度配置
+#feign:
+#  client:
+#    config:
+#      ms-user:
+#        loggerLevel: full
+
+#feign的全局配置
+feign:
+  client:
+    config:
+      default:
+        loggerrLevel: full
+
+#resilience4j 限流模式配置
+#resilience4j:
+#  ratelimiter:
+#    instances:
+#      buyById:
+## 表示从应用启动后，每1秒(limitRefreshPeriod)至多允许1个(limitForPeriod)请求，获取授权操作最多可等待0s(timeoutDuration)
+##         再刷新周期内，请求的最大频次
+#          limitForPeriod: 1
+##          刷新周期
+#          limitRefreshPeriod: 1s
+#          timeoutDuration: 0
+resilience4j:
+  bulkhead:
+    instances:
+      buyById:
+#        最大并发请求数
+        maxConcurrentCalls: 1
+
+
+
+#Bulkhead (SEMAPHORE) 相关配置
+#  ratelimiter:
+#    instances:
+#      {仓壁名称}：
+##        最大并发请求数，默认25
+#        maxConcurrentCalls: 10
+##      仓壁饱和时的最大等待时间，默认0
+#        maxWaitDuration: 10ms
+##      事件缓冲区大小
+#        eventConsumerBufferSize: 1
+
+
+
+
+#Bulkhead (ThreadPool) 相关配置
+#resilience4j:
+#  thread-pool-bulkhead:
+#    instances:
+#      {仓壁名称}：
+##        最大线程池大小
+#      maxThreadPoolSize: 1
+##     核心线程数
+#      coreThreadPoolSize:  1
+##      队列容量，默认100
+#      queueCapacity: 1
+##      当线程数大于内核数时，多余的空闲线程等待 新任务的额最长时间,默认20ms
+#      keepAliveDuration: 20ms
+##      事件缓存区大小
+#      eventConsumerBufferSize: 100
