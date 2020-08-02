@@ -6,7 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 //FEIGN 底层带上了ribbon功能
-@FeignClient(name = "ms-user"/*,configuration = MsUserFeignClientConfiguration.class*/)
+/*,configuration = MsUserFeignClientConfiguration.class*/
+@FeignClient(name = "ms-user",contextId = "noExtendFeign")
 public interface MsUserFeignClient {
     @GetMapping("/users/{userId}")
     UserDto findUserById(@PathVariable("userId") int userId);

@@ -11,5 +11,18 @@
 
     <artifactId>ms-class</artifactId>
 
+<!--    feign的继承，在服务提供者中添加 ms-api的依赖-->
+    <dependencies>
 
+        <dependency>
+            <groupId>com.springcloud</groupId>
+            <artifactId>ms-api</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-zipkin</artifactId>
+        </dependency>
+    </dependencies>
 </project>

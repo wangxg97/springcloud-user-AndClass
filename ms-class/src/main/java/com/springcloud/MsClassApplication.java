@@ -10,7 +10,8 @@ import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 //feign的 代码的全局配置就用 defaultConfiguration属性
-@EnableFeignClients//(defaultConfiguration = MsUserFeignClientConfiguration.class)
+@EnableFeignClients
+//(defaultConfiguration = MsUserFeignClientConfiguration.class)
 public class MsClassApplication {
     public static void main(String[] args) {
         SpringApplication.run(MsClassApplication.class, args);

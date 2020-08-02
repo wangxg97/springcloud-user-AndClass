@@ -22,7 +22,7 @@ public class LessonController {
     @RequestMapping("/buy/{id}")
     //@RateLimiter(name = "buyById",fallbackMethod = "buyByIdFallback")  //限流
    // @CircuitBreaker(name = "buyById",fallbackMethod = "buyByIdFallback") //断路器模式
-    @Bulkhead(name = "buyById",fallbackMethod = "buyByIdFallback",type = Bulkhead.Type.THREADPOOL) //仓壁模式 默认用的是 SEMAPHORE (信号量)   如果想用线程池就 type = Bulkhead.Type.THREADPOOL
+    @Bulkhead(name = "buyById",fallbackMethod = "buyByIdFallback",type = Bulkhead.Type.SEMAPHORE) //仓壁模式 默认用的是 SEMAPHORE (信号量)   如果想用线程池就 type = Bulkhead.Type.THREADPOOL
     public Lesson buyBuyId(@PathVariable int id){
         return lessonService.buyById(id);
         //1.根据ID查询lesson
